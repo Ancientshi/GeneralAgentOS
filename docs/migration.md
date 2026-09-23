@@ -27,8 +27,8 @@ gaos migrate-db old/agent.db --session-table MyAgentSessions --output profiles.l
 ```
 
 The command uses SQLite's backup API to take a consistent snapshot, runs Agno's official migration,
-and checks every legacy session/run identity. It retains legacy run columns. It refuses to overwrite
-an existing output. A failed migration leaves the source untouched; inspect the copy before using it.
+normalizes double-encoded legacy JSON, and checks every legacy session/run identity and run field. It retains legacy run columns. It refuses to overwrite
+an existing output. A failed migration leaves the source untouched and retains a hidden staging copy for inspection. The requested output path is created only after successful verification.
 For a final production cutover, stop old writers before taking the final snapshot so new conversations
 are not lost. Do not point an old runtime at a migrated database.
 
