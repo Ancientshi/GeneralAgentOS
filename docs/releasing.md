@@ -8,7 +8,7 @@ python -m pip install '.[mcp,dev]'
 ruff check src tests
 pytest -q
 python -m build
-git tag v1.0.0
+git tag v1.0.1
 git push origin HEAD --tags
 ```
 
@@ -23,8 +23,8 @@ To publish manually after tests (requires GitHub CLI login):
 ```bash
 python scripts/package_release.py
 gh repo create Ancientshi/GeneralAgentOS --public --source=. --remote=origin --push
-git tag v1.0.0
-git push origin v1.0.0
+git tag v1.0.1
+git push origin v1.0.1
 ```
 
 Inspect the Actions run and release assets before advertising the online installer. To retry a
