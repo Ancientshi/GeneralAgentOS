@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-GAOS_VERSION="${GAOS_VERSION:-1.0.0}"
+GAOS_VERSION="${GAOS_VERSION:-1.0.1}"
 GAOS_INSTALL_DIR="${GAOS_INSTALL_DIR:-$HOME/.local/share/general-agent-os}"
 GAOS_BIN_DIR="${GAOS_BIN_DIR:-$HOME/.local/bin}"
 GAOS_PYTHON="${GAOS_PYTHON:-python3}"
