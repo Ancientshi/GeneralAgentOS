@@ -1,0 +1,4 @@
+# Build the benchmark sandbox first. This optional image adds two model families.
+FROM gaos-bench-sandbox:latest
+RUN pip install --no-cache-dir catboost==1.2.8 statsforecast==2.0.2 numba==0.61.2 llvmlite==0.44.0
+ENV NUMBA_CACHE_DIR=/tmp/numba MPLCONFIGDIR=/tmp/matplotlib

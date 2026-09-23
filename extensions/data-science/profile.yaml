@@ -1,0 +1,32 @@
+schema_version: 1
+os:
+  id: data-science-lab
+  name: Data Science Lab
+  host: 127.0.0.1
+  port: 7789
+agents:
+  data-scientist:
+    id: data-scientist
+    name: Data Scientist
+    model: ${BENCH_MODEL:-gpt-4.1-mini}
+    instructions: |
+      Use data-science-router to select methods and benchmark-runner to manage tests.
+      Follow public task requirements. Execute portable recipes in the benchmark sandbox.
+      Distinguish local validation from official evaluator feedback. Save recipe source and receipts.
+    skill_list: [./skills, ../benchmarks/skills]
+    mcp_list: [data-science, benchmarks]
+    add_history_to_context: false
+    read_chat_history: false
+    storage_db: ../benchmarks/runs/data-scientist-sessions.db
+    tool_call_limit: 150
+mcp_servers:
+  data-science:
+    command: ${DS_PYTHON:-python}
+    args: [-m, gaos_ds, serve]
+    cwd: .
+    timeout_seconds: 60
+  benchmarks:
+    command: ${BENCH_PYTHON:-python}
+    args: [-m, gaos_bench, --config, benchmarks.yaml, serve]
+    cwd: ../benchmarks
+    timeout_seconds: 300

@@ -1,0 +1,555 @@
+[
+  {
+    "id": "scikit-learn",
+    "name": "scikit-learn",
+    "kind": "library",
+    "capabilities": [
+      "classification",
+      "regression",
+      "clustering",
+      "explanation"
+    ],
+    "compute": "cpu",
+    "recipes": [
+      "tabular-sklearn"
+    ],
+    "benchmark_fit": [
+      "dare-bench",
+      "ambig-ds",
+      "coda-bench"
+    ],
+    "summary": "Pipeline、交叉验证、线性模型、随机森林、聚类与置换重要性。",
+    "docs_url": "https://scikit-learn.org/stable/",
+    "source_url": "https://scikit-learn.org/stable/common_pitfalls.html",
+    "package": "scikit-learn",
+    "notes": "DARE 官方 reference_solution.py 直接使用；其他映射是适用性判断。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "recipe"
+  },
+  {
+    "id": "catboost",
+    "name": "CatBoost",
+    "kind": "model-library",
+    "capabilities": [
+      "classification",
+      "regression"
+    ],
+    "compute": "cpu",
+    "recipes": [
+      "tabular-catboost"
+    ],
+    "benchmark_fit": [
+      "dare-bench",
+      "ambig-ds"
+    ],
+    "summary": "支持类别特征的梯度提升；先固定划分，再与简单基线比较。",
+    "docs_url": "https://catboost.ai/docs/en/",
+    "source_url": "https://arxiv.org/abs/1706.09516",
+    "package": "catboost",
+    "notes": "适合含类别列的表格；需要可选依赖。CatBoost 1.2.8 已在合成数据运行验证。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "recipe"
+  },
+  {
+    "id": "lightgbm",
+    "name": "LightGBM",
+    "kind": "model-library",
+    "capabilities": [
+      "classification",
+      "regression"
+    ],
+    "compute": "cpu",
+    "recipes": [],
+    "benchmark_fit": [
+      "dare-bench",
+      "ambig-ds"
+    ],
+    "summary": "树提升模型，支持分类、回归和排序；适合作为可扩展候选。",
+    "docs_url": "https://lightgbm.readthedocs.io/en/stable/",
+    "source_url": "https://github.com/microsoft/LightGBM",
+    "package": "lightgbm",
+    "notes": "资源卡；尚无专用模板。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "catalog-only"
+  },
+  {
+    "id": "xgboost",
+    "name": "XGBoost",
+    "kind": "model-library",
+    "capabilities": [
+      "classification",
+      "regression"
+    ],
+    "compute": "cpu",
+    "recipes": [],
+    "benchmark_fit": [
+      "dare-bench",
+      "ambig-ds"
+    ],
+    "summary": "梯度提升树；候选模型与调参对象。",
+    "docs_url": "https://xgboost.readthedocs.io/en/stable/",
+    "source_url": "https://arxiv.org/abs/1603.02754",
+    "package": "xgboost",
+    "notes": "资源卡；尚无专用模板。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "catalog-only"
+  },
+  {
+    "id": "autogluon",
+    "name": "AutoGluon Tabular",
+    "kind": "automl",
+    "capabilities": [
+      "classification",
+      "regression"
+    ],
+    "compute": "cpu",
+    "recipes": [
+      "tabular-autogluon"
+    ],
+    "benchmark_fit": [
+      "dare-bench",
+      "ambig-ds"
+    ],
+    "summary": "自动训练和组合表格模型；模板限制运行时间，使用显式验证集。",
+    "docs_url": "https://auto.gluon.ai/stable/tutorials/tabular/index.html",
+    "source_url": "https://arxiv.org/abs/2003.06505",
+    "package": "autogluon.tabular",
+    "notes": "可选环境；大型集成会消耗更多内存和时间。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "recipe"
+  },
+  {
+    "id": "tabpfn",
+    "name": "TabPFN",
+    "kind": "foundation-model",
+    "capabilities": [
+      "classification",
+      "regression"
+    ],
+    "compute": "gpu-recommended",
+    "recipes": [
+      "tabular-tabpfn"
+    ],
+    "benchmark_fit": [
+      "dare-bench",
+      "ambig-ds"
+    ],
+    "summary": "预训练表格模型；模板只加载操作者准备的本地 checkpoint。",
+    "docs_url": "https://github.com/PriorLabs/TabPFN",
+    "source_url": "https://www.nature.com/articles/s41586-024-08328-6",
+    "package": "tabpfn",
+    "notes": "代码和权重许可分开；版本、数据规模与硬件限制以具体 checkpoint 为准。",
+    "checked_at": "2026-09-23",
+    "license_note": "Official repository: code Apache-2.0; TabPFN-2.5/2.6/3/3.5 weights non-commercial; TabPFN-2 has a separate Prior Labs license. Pin the chosen checkpoint and review its terms.",
+    "integration": "recipe"
+  },
+  {
+    "id": "statsforecast",
+    "name": "StatsForecast",
+    "kind": "model-library",
+    "capabilities": [
+      "forecasting"
+    ],
+    "compute": "cpu",
+    "recipes": [
+      "forecast-statsforecast"
+    ],
+    "benchmark_fit": [
+      "dare-bench"
+    ],
+    "summary": "AutoARIMA、ETS 与季节性朴素预测；先做按时间回测。",
+    "docs_url": "https://github.com/Nixtla/statsforecast",
+    "source_url": "https://nixtlaverse.nixtla.io/statsforecast/docs/tutorials/crossvalidation.html",
+    "package": "statsforecast",
+    "notes": "本模板支持规则频率、多序列、单变量；不隐式补齐缺失日期。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "recipe"
+  },
+  {
+    "id": "mlforecast",
+    "name": "MLForecast",
+    "kind": "model-library",
+    "capabilities": [
+      "forecasting"
+    ],
+    "compute": "cpu",
+    "recipes": [],
+    "benchmark_fit": [
+      "dare-bench"
+    ],
+    "summary": "滞后与日期特征、机器学习预测、外生变量和共形区间。",
+    "docs_url": "https://github.com/Nixtla/mlforecast",
+    "source_url": "https://nixtlaverse.nixtla.io/mlforecast/",
+    "package": "mlforecast",
+    "notes": "资源卡；尚无专用模板。未来外生变量必须在预测时已知。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "catalog-only"
+  },
+  {
+    "id": "chronos-2",
+    "name": "Chronos-2",
+    "kind": "foundation-model",
+    "capabilities": [
+      "forecasting"
+    ],
+    "compute": "gpu-recommended",
+    "recipes": [
+      "forecast-chronos"
+    ],
+    "benchmark_fit": [
+      "dare-bench"
+    ],
+    "summary": "预训练时间序列模型，支持零样本预测；模板提供本地权重单变量入口。",
+    "docs_url": "https://huggingface.co/amazon/chronos-2",
+    "source_url": "https://arxiv.org/abs/2510.15821",
+    "package": "chronos-forecasting",
+    "notes": "模型支持多变量与协变量；当前模板仅单变量，完整功能见官方文档。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "recipe"
+  },
+  {
+    "id": "timesfm",
+    "name": "TimesFM",
+    "kind": "foundation-model",
+    "capabilities": [
+      "forecasting"
+    ],
+    "compute": "gpu-recommended",
+    "recipes": [],
+    "benchmark_fit": [
+      "dare-bench"
+    ],
+    "summary": "Google Research 的预训练时间序列预测模型。",
+    "docs_url": "https://github.com/google-research/timesfm",
+    "source_url": "https://arxiv.org/abs/2310.10688",
+    "package": "timesfm",
+    "notes": "资源卡；尚无专用模板。需要选择并固定模型版本。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "catalog-only"
+  },
+  {
+    "id": "pandas",
+    "name": "pandas",
+    "kind": "library",
+    "capabilities": [
+      "exploration",
+      "engineering",
+      "forecasting"
+    ],
+    "compute": "cpu",
+    "recipes": [
+      "profile-csv",
+      "forecast-seasonal"
+    ],
+    "benchmark_fit": [
+      "ddr-bench",
+      "coda-bench",
+      "dacomp",
+      "dare-bench"
+    ],
+    "summary": "表格检查、缺失统计、聚合和轻量季节基线。",
+    "docs_url": "https://pandas.pydata.org/docs/",
+    "source_url": "https://pandas.pydata.org/docs/user_guide/index.html",
+    "package": "pandas",
+    "notes": "默认检查完整 CSV；大文件应先在沙箱采样或使用流式工具。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "recipe"
+  },
+  {
+    "id": "scipy",
+    "name": "SciPy statistics",
+    "kind": "library",
+    "capabilities": [
+      "statistics"
+    ],
+    "compute": "cpu",
+    "recipes": [
+      "compare-groups"
+    ],
+    "benchmark_fit": [
+      "ddr-bench",
+      "coda-bench",
+      "dacomp"
+    ],
+    "summary": "独立两组的 Welch 检验与均值差区间；不能自动证明因果。",
+    "docs_url": "https://docs.scipy.org/doc/scipy/reference/stats.html",
+    "source_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.ttest_ind.html",
+    "package": "scipy",
+    "notes": "模板要求独立观测；配对、重复测量、聚类样本需要另选设计。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "recipe"
+  },
+  {
+    "id": "statsmodels",
+    "name": "statsmodels",
+    "kind": "library",
+    "capabilities": [
+      "statistics",
+      "regression",
+      "forecasting"
+    ],
+    "compute": "cpu",
+    "recipes": [],
+    "benchmark_fit": [
+      "ddr-bench",
+      "coda-bench",
+      "dacomp"
+    ],
+    "summary": "统计回归、估计区间、诊断、广义线性模型和时间序列。",
+    "docs_url": "https://www.statsmodels.org/stable/index.html",
+    "source_url": "https://www.statsmodels.org/stable/user-guide.html",
+    "package": "statsmodels",
+    "notes": "资源卡；尚无专用模板。先检查模型假设。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "catalog-only"
+  },
+  {
+    "id": "shap",
+    "name": "SHAP",
+    "kind": "library",
+    "capabilities": [
+      "explanation"
+    ],
+    "compute": "cpu",
+    "recipes": [],
+    "benchmark_fit": [
+      "ddr-bench",
+      "coda-bench",
+      "dacomp"
+    ],
+    "summary": "解释模型输出中的特征贡献。",
+    "docs_url": "https://shap.readthedocs.io/en/latest/",
+    "source_url": "https://arxiv.org/abs/1705.07874",
+    "package": "shap",
+    "notes": "资源卡；解释依赖背景数据与模型，不等于因果效应。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "catalog-only"
+  },
+  {
+    "id": "dowhy",
+    "name": "DoWhy",
+    "kind": "library",
+    "capabilities": [
+      "causal"
+    ],
+    "compute": "cpu",
+    "recipes": [],
+    "benchmark_fit": [
+      "ddr-bench",
+      "dacomp"
+    ],
+    "summary": "因果图、识别、估计与反驳检验流程。",
+    "docs_url": "https://www.pywhy.org/dowhy/v0.13/",
+    "source_url": "https://arxiv.org/abs/2011.04216",
+    "package": "dowhy",
+    "notes": "资源卡；图与识别假设必须来自研究设计，不能自动编造。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "catalog-only"
+  },
+  {
+    "id": "duckdb",
+    "name": "DuckDB",
+    "kind": "library",
+    "capabilities": [
+      "engineering",
+      "discovery",
+      "exploration"
+    ],
+    "compute": "cpu",
+    "recipes": [],
+    "benchmark_fit": [
+      "coda-bench",
+      "dacomp",
+      "ddr-bench"
+    ],
+    "summary": "本地 SQL 分析 CSV/Parquet，适合连接和聚合多个表。",
+    "docs_url": "https://duckdb.org/docs/stable/clients/python/overview",
+    "source_url": "https://duckdb.org/docs/stable/",
+    "package": "duckdb",
+    "notes": "资源卡；SQLite 数据库另有 sqlite-inspect 模板。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "catalog-only"
+  },
+  {
+    "id": "polars",
+    "name": "Polars",
+    "kind": "library",
+    "capabilities": [
+      "engineering",
+      "exploration"
+    ],
+    "compute": "cpu",
+    "recipes": [],
+    "benchmark_fit": [
+      "coda-bench",
+      "dacomp"
+    ],
+    "summary": "惰性查询、表达式和列式处理。",
+    "docs_url": "https://docs.pola.rs/",
+    "source_url": "https://docs.pola.rs/user-guide/lazy/using/",
+    "package": "polars",
+    "notes": "资源卡；尚无专用模板。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "catalog-only"
+  },
+  {
+    "id": "pandera",
+    "name": "Pandera",
+    "kind": "library",
+    "capabilities": [
+      "engineering"
+    ],
+    "compute": "cpu",
+    "recipes": [],
+    "benchmark_fit": [
+      "dacomp",
+      "coda-bench"
+    ],
+    "summary": "用 schema 检验类型、缺失、范围等数据契约。",
+    "docs_url": "https://pandera.readthedocs.io/en/stable/",
+    "source_url": "https://github.com/unionai-oss/pandera",
+    "package": "pandera",
+    "notes": "资源卡；约束来自任务和业务定义。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "catalog-only"
+  },
+  {
+    "id": "sqlite",
+    "name": "SQLite",
+    "kind": "library",
+    "capabilities": [
+      "discovery",
+      "engineering",
+      "exploration"
+    ],
+    "compute": "cpu",
+    "recipes": [
+      "sqlite-inspect"
+    ],
+    "benchmark_fit": [
+      "dacomp",
+      "coda-bench",
+      "ddr-bench"
+    ],
+    "summary": "只读枚举表、列与行数，为进一步 SQL 分析提供索引。",
+    "docs_url": "https://docs.python.org/3/library/sqlite3.html",
+    "source_url": "https://www.sqlite.org/pragma.html",
+    "package": "stdlib",
+    "notes": "模板不执行模型提供的 SQL，不读取隐藏评测库。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "recipe"
+  },
+  {
+    "id": "huggingface",
+    "name": "Hugging Face Hub",
+    "kind": "resource-hub",
+    "capabilities": [
+      "discovery"
+    ],
+    "compute": "network",
+    "recipes": [],
+    "benchmark_fit": [],
+    "summary": "模型卡、数据集卡、版本和许可元数据。",
+    "docs_url": "https://huggingface.co/docs/hub/api",
+    "source_url": "https://huggingface.co/docs/hub/model-cards",
+    "package": "stdlib",
+    "notes": "仅显式启用 online 服务后允许查询元数据；不下载或执行仓库代码。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "search-provider"
+  },
+  {
+    "id": "kaggle",
+    "name": "Kaggle",
+    "kind": "resource-hub",
+    "capabilities": [
+      "discovery"
+    ],
+    "compute": "network",
+    "recipes": [],
+    "benchmark_fit": [],
+    "summary": "公开数据集、模型和竞赛资源；官方 CLI 支持检索。",
+    "docs_url": "https://github.com/Kaggle/kaggle-cli",
+    "source_url": "https://www.kaggle.com/docs/api",
+    "package": "kaggle",
+    "notes": "online 工具通过官方 CLI 只读检索 datasets/models；不提交竞赛、不拉取 notebooks。",
+    "checked_at": "2026-09-23",
+    "license_note": "Consult the upstream code license and any separate model/data license before use.",
+    "integration": "search-provider"
+  },
+  {
+    "id": "huggingface-skills",
+    "name": "Hugging Face Skills",
+    "kind": "skill-library",
+    "capabilities": [
+      "discovery"
+    ],
+    "compute": "documentation",
+    "recipes": [],
+    "benchmark_fit": [],
+    "summary": "官方 Agent Skills 库，覆盖 Hub、数据集、训练和模型评测；可按需阅读与接入。",
+    "docs_url": "https://github.com/huggingface/skills",
+    "source_url": "https://github.com/huggingface/skills",
+    "package": null,
+    "notes": "外部技能库索引；本交付未批量安装、执行或审计这些技能。当前接入的是自主编写的六个精简技能。",
+    "checked_at": "2026-09-23",
+    "license_note": "Review the selected upstream skill license and scripts before copying.",
+    "integration": "catalog-only"
+  },
+  {
+    "id": "scientific-agent-skills",
+    "name": "K-Dense Scientific Agent Skills",
+    "kind": "skill-library",
+    "capabilities": [
+      "discovery"
+    ],
+    "compute": "documentation",
+    "recipes": [],
+    "benchmark_fit": [],
+    "summary": "第三方科学分析技能库；用于发现可复用分析工作流，需逐项核查适用领域和依赖。",
+    "docs_url": "https://github.com/K-Dense-AI/scientific-agent-skills",
+    "source_url": "https://github.com/K-Dense-AI/scientific-agent-skills",
+    "package": null,
+    "notes": "外部技能库索引；本交付未批量安装、执行或审计这些技能。当前接入的是自主编写的六个精简技能。",
+    "checked_at": "2026-09-23",
+    "license_note": "Review the selected upstream skill license and scripts before copying.",
+    "integration": "catalog-only"
+  },
+  {
+    "id": "kaggle-skills",
+    "name": "Kaggle CLI Skills",
+    "kind": "skill-library",
+    "capabilities": [
+      "discovery"
+    ],
+    "compute": "documentation",
+    "recipes": [],
+    "benchmark_fit": [],
+    "summary": "Kaggle 官方 CLI 附带的技能资料；有助于维护检索工具和资源工作流。",
+    "docs_url": "https://github.com/Kaggle/kaggle-cli/tree/main/skills",
+    "source_url": "https://github.com/Kaggle/kaggle-cli/tree/main/skills",
+    "package": null,
+    "notes": "外部技能库索引；本交付未批量安装、执行或审计这些技能。当前接入的是自主编写的六个精简技能。",
+    "checked_at": "2026-09-23",
+    "license_note": "Review the selected upstream skill license and scripts before copying.",
+    "integration": "catalog-only"
+  }
+]

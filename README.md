@@ -101,6 +101,21 @@ provide automatic restart after a crash or reboot; use Compose or your service m
 Bind to a non-loopback address only with a configured `GAOS_API_KEY`; use HTTPS at your reverse proxy.
 The shared key grants full access to this deployment. This release does not provide per-user isolation.
 
+## Optional benchmark skills
+
+[Benchmark Lab](extensions/benchmarks/README.md) is an independently installed skill and MCP extension
+for choosing data-science benchmark tasks, collecting artifacts and routing submissions to upstream
+evaluators. It includes adapters for DARE-Bench, CoDA-Bench, DDR-Bench, DAComp and both Ambig-DS suites,
+with explicit setup requirements and an extension contract for additional suites. It uses existing
+profile fields and does not add benchmark dependencies to the core runtime.
+
+[Data Science Lab](extensions/data-science/README.md) adds 24 resource cards, six focused analysis skills
+and ten portable model/analysis recipes. Its independent MCP service supplies method discovery and code
+templates; the benchmark sandbox executes them and the official evaluator scores the artifacts.
+The combined profile is `extensions/data-science/profile.yaml`. Optional Hugging Face and Kaggle metadata
+search is separate from the default offline benchmark workflow. See the extension's validation table
+for tested baseline recipes versus optional model templates.
+
 ## Development and releases
 
 ```bash

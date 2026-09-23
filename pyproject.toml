@@ -33,7 +33,8 @@ Issues = "https://github.com/Ancientshi/GeneralAgentOS/issues"
 packages = ["src/general_agent_os"]
 
 [tool.hatch.build.targets.sdist]
-include = ["src", "tests", "examples", "docs", "scripts", "pyproject.toml", "README.md", "README.zh-CN.md", "LICENSE", "CHANGELOG.md", "Dockerfile", "compose.yaml", ".env.example", "install.sh"]
+include = ["src", "tests", "examples", "docs", "scripts", "extensions/benchmarks", "extensions/data-science", "pyproject.toml", "README.md", "README.zh-CN.md", "LICENSE", "CHANGELOG.md", "Dockerfile", "compose.yaml", ".env.example", "install.sh"]
+exclude = ["extensions/benchmarks/upstream/**", "extensions/benchmarks/datasets/**", "extensions/benchmarks/runs/**", "extensions/benchmarks/benchmarks.yaml", "extensions/benchmarks/dist/**", "extensions/data-science/dist/**", "extensions/data-science/examples/output/**"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

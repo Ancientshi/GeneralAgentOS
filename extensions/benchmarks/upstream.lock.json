@@ -1,0 +1,8 @@
+{
+  "dare-bench": {"url": "https://github.com/Snowflake-Labs/dare-bench.git", "directory": "dare-bench", "revision": "01447145304c67b861a004ada6d86f29640de61a"},
+  "coda-bench": {"url": "https://github.com/ruc-datalab/CoDA-Bench.git", "directory": "CoDA-Bench", "revision": "3255750268657f074d846a2919083008e421aa95"},
+  "ddr-bench": {"url": "https://github.com/thinkwee/DDR_Bench.git", "directory": "DDR_Bench", "revision": "cc0aafb01e3fb76f3522a69e8c1474d4490c439a"},
+  "dacomp": {"url": "https://github.com/ByteDance-Seed/DAComp.git", "directory": "DAComp", "revision": "027ccaf20f0d3743d9291fd575d9bc785a5fe3db"},
+  "ambig-ds": {"url": "https://huggingface.co/datasets/anonymous222bit/Ambig-DS-T", "directory": "Ambig-DS-T", "revision": "9e567c66ac8bfec31d3b2b720bbd2c122abf82e4"},
+  "ambig-ds-objective": {"url": "https://huggingface.co/datasets/anonymous222bit/Ambig-DS-M", "directory": "Ambig-DS-M", "revision": "3187b0f5e9d1f5329914e5669bb2cc19592663d1"}
+}

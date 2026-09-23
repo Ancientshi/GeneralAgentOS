@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "general-agent-benchmarks"
+version = "0.1.0"
+description = "Independent benchmark tasks, sandbox tools and official evaluator adapters for GeneralAgentOS"
+requires-python = ">=3.10"
+dependencies = ["PyYAML>=6,<7"]
+
+[project.optional-dependencies]
+mcp = ["mcp>=2.1,<3", "fastmcp>=4,<5"]
+test = ["pytest>=8,<10"]
+
+[project.scripts]
+gaos-bench = "gaos_bench.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gaos_bench"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "skills", "scripts", "README.md", "pyproject.toml", "profile.yaml", "benchmarks.example.yaml", "Dockerfile.sandbox", "upstream.lock.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

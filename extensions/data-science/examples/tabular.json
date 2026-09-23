@@ -1,0 +1,12 @@
+{
+  "train_path": "train.csv",
+  "test_path": "test.csv",
+  "target": "target",
+  "features": ["age", "income", "category"],
+  "problem": "classification",
+  "split": "random",
+  "id_column": "id",
+  "model": "linear",
+  "prediction_column": "prediction",
+  "output": "predictions.csv"
+}
