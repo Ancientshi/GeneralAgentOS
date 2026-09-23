@@ -10,7 +10,7 @@ application code. Start one agent or several through the same API.
 
 ## Install
 
-Linux / macOS, Python 3.10 or newer:
+Linux, Python 3.10 or newer:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Ancientshi/GeneralAgentOS/v1.0.2/install.sh | bash
