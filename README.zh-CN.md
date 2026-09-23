@@ -7,7 +7,7 @@
 
 ## 一键安装
 
-需要 Linux/macOS 和 Python 3.10+：
+需要 Linux 和 Python 3.10+：
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Ancientshi/GeneralAgentOS/v1.0.2/install.sh | bash
