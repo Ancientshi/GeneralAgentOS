@@ -1,0 +1,21 @@
+schema_version: 1
+os:
+  id: mcp-os
+agents:
+  assistant:
+    model: gpt-4.1-mini
+    instructions: Use the configured tools when the task requires them.
+    mcp_list: [remote-tools]
+    timeout_seconds: 30
+    tool_call_limit: 10
+mcp_servers:
+  remote-tools:
+    url: ${MCP_URL}
+    transport: streamable-http
+    headers:
+      Authorization: Bearer ${MCP_TOKEN}
+  # To use a local server, add its name to mcp_list and provide an installed executable:
+  # local-tools:
+  #   command: python
+  #   args: [server.py]
+  #   cwd: ./tools
