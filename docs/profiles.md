@@ -6,7 +6,29 @@ to the first profile; environment values are resolved after merging. `.env` besi
 loads automatically without overriding the shell environment; `--env-file` selects another file.
 
 `os`: `id`, `name`, `description`, `host` (127.0.0.1), `port` (7777), `cors_origins` (list),
-`api_key_env` (GAOS_API_KEY). A non-loopback host requires an API key.
+`api_key_env` (GAOS_API_KEY), `authorization` (false), `jwt_verification_key_file` (optional).
+A non-loopback host requires an API key or configured JWT authorization.
+
+For the Agno Control Plane's Token-Based Authorization (JWT), enable the switch in the
+Control Plane, save its public verification key as a PEM file, and add an overlay:
+
+```yaml
+os:
+  authorization: true
+  jwt_verification_key_file: /etc/general-agent-os/control-plane-public.pem
+  cors_origins:
+    - https://os.agno.com
+```
+
+This uses Agno's native RS256 signature validation and scope authorization. Relative key
+paths follow the first profile's directory. Alternatively, omit the file setting and set
+Agno's `JWT_VERIFICATION_KEY` or `JWT_JWKS_FILE` environment variable. A missing verification
+source prevents startup. Do not supply a private signing key.
+
+JWT mode does not install the legacy `GAOS_API_KEY` middleware, which would otherwise reject
+Control Plane tokens before Agno can validate them. Static API keys cannot authenticate on a
+JWT endpoint. To retain an existing static-key client, run a separate instance with the
+original profile and use a JWT overlay on a different port for the Control Plane.
 
 Each agent requires `model`. Use `provider: openai` (default) or `openai-compatible`, `vllm`,
 `proxyllm`, `siliconflow`, `jacobapi`. Non-OpenAI providers require `base_url`. These names all use

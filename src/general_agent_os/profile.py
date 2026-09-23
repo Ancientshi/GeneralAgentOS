@@ -119,9 +119,20 @@ def validate_profile(profile: Profile) -> None:
     settings = data.setdefault("os", {})
     if not isinstance(settings, dict):
         raise ProfileError("os must be a mapping")
-    unknown = set(settings) - {"id", "name", "description", "host", "port", "cors_origins", "api_key_env"}
+    unknown = set(settings) - {
+        "id", "name", "description", "host", "port", "cors_origins", "api_key_env",
+        "authorization", "jwt_verification_key_file",
+    }
     if unknown:
         raise ProfileError(f"Unknown os fields: {', '.join(sorted(unknown))}")
+    if not isinstance(settings.get("authorization", False), bool):
+        raise ProfileError("os.authorization must be a boolean")
+    if "jwt_verification_key_file" in settings:
+        if not settings.get("authorization"):
+            raise ProfileError("os.jwt_verification_key_file requires os.authorization: true")
+        value = settings["jwt_verification_key_file"]
+        if not isinstance(value, str) or not value.strip():
+            raise ProfileError("os.jwt_verification_key_file must be a non-empty path")
     try:
         port = int(settings.get("port", 7777))
     except (ValueError, TypeError):
