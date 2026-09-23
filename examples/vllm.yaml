@@ -1,0 +1,14 @@
+schema_version: 1
+os:
+  id: local-model-os
+  port: 7777
+agents:
+  local-assistant:
+    provider: vllm
+    model: ${MODEL_ID}
+    base_url: ${MODEL_BASE_URL:-http://127.0.0.1:8000/v1}
+    api_key_env: MODEL_API_KEY
+    instructions: Help the user with their task.
+    storage_db: ${GAOS_DATA_DIR:-data}/local-assistant.db
+    request_params:
+      parallel_tool_calls: false
