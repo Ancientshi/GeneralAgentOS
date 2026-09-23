@@ -1,7 +1,7 @@
 services:
   agentos:
     build: .
-    image: general-agent-os:1.0.1
+    image: general-agent-os:1.0.2
     restart: unless-stopped
     env_file: .env
     environment:
