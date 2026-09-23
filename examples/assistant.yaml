@@ -1,0 +1,12 @@
+schema_version: 1
+os:
+  id: assistant-os
+  host: 127.0.0.1
+  port: 7777
+agents:
+  assistant:
+    model: gpt-4.1-mini
+    instructions: Help the user complete their task. Be concise and accurate.
+    storage_db: ${GAOS_DATA_DIR:-data}/assistant.db
+    add_history_to_context: true
+    num_history_runs: 5
