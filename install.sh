@@ -23,9 +23,14 @@ if [[ -e "$GAOS_BIN_DIR/gaos" || -L "$GAOS_BIN_DIR/gaos" ]]; then
 fi
 if [[ ! -x "$GAOS_INSTALL_DIR/venv/bin/python" ]] || ! "$GAOS_INSTALL_DIR/venv/bin/python" -m pip --version >/dev/null 2>&1; then
   if ! "$GAOS_PYTHON" -m venv "$GAOS_INSTALL_DIR/venv" 2>"$temp_dir/venv.log"; then
-    echo "Bootstrapping an isolated environment with the official PyPA virtualenv zipapp..."
-    curl -fsSL --retry 3 https://bootstrap.pypa.io/virtualenv.pyz -o "$temp_dir/virtualenv.pyz"
-    "$GAOS_PYTHON" "$temp_dir/virtualenv.pyz" "$GAOS_INSTALL_DIR/venv"
+    echo "Bootstrapping an isolated environment with PyPA virtualenv..."
+    if "$GAOS_PYTHON" -m pip --version >/dev/null 2>&1; then
+      "$GAOS_PYTHON" -m pip install --target "$temp_dir/bootstrap" virtualenv
+      PYTHONPATH="$temp_dir/bootstrap" "$GAOS_PYTHON" -m virtualenv "$GAOS_INSTALL_DIR/venv"
+    else
+      curl -fsSL --retry 3 https://bootstrap.pypa.io/virtualenv.pyz -o "$temp_dir/virtualenv.pyz"
+      "$GAOS_PYTHON" "$temp_dir/virtualenv.pyz" "$GAOS_INSTALL_DIR/venv"
+    fi
   fi
 fi
 python="$GAOS_INSTALL_DIR/venv/bin/python"
