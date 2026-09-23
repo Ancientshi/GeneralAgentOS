@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1 — 2026-09-23
+
+- Normalize double-encoded legacy session JSON on a private migration staging copy.
+- Verify every legacy run field and publish the destination database only after validation succeeds.
+- Add regression coverage for real legacy encoding and failed migrations.
+
 ## 1.0.0 — 2026-09-23
 
 - Upgrade the runtime to Agno / AgentOS 3.0.10.
