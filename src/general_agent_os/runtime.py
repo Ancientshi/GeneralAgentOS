@@ -12,6 +12,7 @@ from agno.os import AgentOS
 from starlette.responses import JSONResponse
 
 from . import __version__
+from .models import VLLMChat
 from .profile import AGENT_FIELDS, Profile, ProfileError
 
 
@@ -25,6 +26,10 @@ def build_model(cfg: dict):
     api_key = os.getenv(env_name)
     if not api_key:
         raise ProfileError(f"Missing model credential environment variable: {env_name}")
+    if provider == "vllm":
+        options.setdefault("provider", "VLLM")
+        options.setdefault("name", "VLLM")
+        return VLLMChat(id=cfg["model"], base_url=cfg.get("base_url"), api_key=api_key, **options)
     return OpenAIChat(id=cfg["model"], base_url=cfg.get("base_url"), api_key=api_key, **options)
 
 
