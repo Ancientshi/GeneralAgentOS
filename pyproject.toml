@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "general-agent-os"
+version = "1.0.0"
+description = "Write an agent profile. Deploy an AgentOS."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{name = "Yunxiao Shi"}]
+dependencies = [
+  "agno==3.0.10", "fastapi>=0.115,<1", "uvicorn>=0.34,<1",
+  "openai>=1.100,<3", "PyYAML>=6.0.2,<7", "python-dotenv>=1.1,<2",
+  "sqlalchemy>=2.0.40,<3", "httpx>=0.28,<1", "psutil>=7,<8",
+  "python-multipart>=0.0.20,<1",
+]
+
+[project.optional-dependencies]
+mcp = ["agno[mcp]==3.0.10"]
+knowledge = ["chromadb>=1,<2"]
+dev = ["pytest>=8,<10", "build>=1.2,<2", "ruff>=0.11,<1"]
+
+[project.scripts]
+gaos = "general_agent_os.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Ancientshi/GeneralAgentOS"
+Issues = "https://github.com/Ancientshi/GeneralAgentOS/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/general_agent_os"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "examples", "docs", "scripts", "pyproject.toml", "README.md", "README.zh-CN.md", "LICENSE", "CHANGELOG.md", "Dockerfile", "compose.yaml", ".env.example", "install.sh"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
