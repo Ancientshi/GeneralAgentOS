@@ -1,0 +1,16 @@
+services:
+  agentos:
+    build: .
+    image: general-agent-os:1.0.0
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      GAOS_DATA_DIR: /data
+    ports:
+      - "127.0.0.1:${GAOS_PORT:-7777}:7777"
+    volumes:
+      - ./examples:/profiles:ro
+      - agentos-data:/data
+    command: ["serve", "-p", "/profiles/assistant.yaml", "-p", "/profiles/docker.yaml"]
+volumes:
+  agentos-data:
