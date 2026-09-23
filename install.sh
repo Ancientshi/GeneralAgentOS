@@ -12,6 +12,8 @@ if [[ -n "${BASH_SOURCE[0]:-}" && -f "${BASH_SOURCE[0]}" ]]; then
   script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 fi
 source_path="${GAOS_SOURCE:-$script_dir}"
+temp_dir="$(mktemp -d)"
+trap 'rm -rf "$temp_dir"' EXIT
 mkdir -p "$GAOS_INSTALL_DIR" "$GAOS_BIN_DIR"
 if [[ -e "$GAOS_BIN_DIR/gaos" || -L "$GAOS_BIN_DIR/gaos" ]]; then
   if [[ ! -L "$GAOS_BIN_DIR/gaos" || "$(readlink "$GAOS_BIN_DIR/gaos")" != "$GAOS_INSTALL_DIR/venv/bin/gaos" ]]; then
@@ -19,16 +21,18 @@ if [[ -e "$GAOS_BIN_DIR/gaos" || -L "$GAOS_BIN_DIR/gaos" ]]; then
     exit 1
   fi
 fi
-if [[ ! -x "$GAOS_INSTALL_DIR/venv/bin/python" ]]; then
-  "$GAOS_PYTHON" -m venv "$GAOS_INSTALL_DIR/venv"
+if [[ ! -x "$GAOS_INSTALL_DIR/venv/bin/python" ]] || ! "$GAOS_INSTALL_DIR/venv/bin/python" -m pip --version >/dev/null 2>&1; then
+  if ! "$GAOS_PYTHON" -m venv "$GAOS_INSTALL_DIR/venv" 2>"$temp_dir/venv.log"; then
+    echo "Bootstrapping an isolated environment with the official PyPA virtualenv zipapp..."
+    curl -fsSL --retry 3 https://bootstrap.pypa.io/virtualenv.pyz -o "$temp_dir/virtualenv.pyz"
+    "$GAOS_PYTHON" "$temp_dir/virtualenv.pyz" "$GAOS_INSTALL_DIR/venv"
+  fi
 fi
 python="$GAOS_INSTALL_DIR/venv/bin/python"
 "$python" -m pip install --upgrade pip
 if [[ -n "$source_path" && -f "$source_path/pyproject.toml" ]]; then
   "$python" -m pip install --upgrade "$source_path[mcp]"
 else
-  temp_dir="$(mktemp -d)"
-  trap 'rm -rf "$temp_dir"' EXIT
   asset="general_agent_os-${GAOS_VERSION}-py3-none-any.whl"
   release="https://github.com/Ancientshi/GeneralAgentOS/releases/download/v${GAOS_VERSION}"
   curl -fsSL --retry 3 "$release/$asset" -o "$temp_dir/$asset"
