@@ -139,6 +139,12 @@ class Engine:
                 entries = sorted(p.name + ("/" if p.is_dir() else "") for p in target.iterdir())
                 return {"entries": entries[:200], "truncated": len(entries) > 200}
             with target.open("rb") as f:
+                if b"\x00" in f.read(8192):
+                    raise BenchError(
+                        "This is a binary file; read_file only supports text. "
+                        "Use execute_python with sqlite3, pandas or the appropriate reader "
+                        "to inspect its schema and rows."
+                    )
                 f.seek(offset)
                 data = f.read(limit + 1)
             return {"text": data[:limit].decode("utf-8", errors="replace"), "truncated": len(data) > limit}
