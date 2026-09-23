@@ -1,0 +1,13 @@
+schema_version: 1
+os:
+  id: writing-os
+  port: 7777
+agents:
+  writer:
+    model: gpt-4.1-mini
+    instructions: Draft clear, concise text from the user's brief.
+    storage_db: ${GAOS_DATA_DIR:-data}/writer.db
+  editor:
+    model: gpt-4.1-mini
+    instructions: Edit the user's text while preserving its meaning and voice.
+    storage_db: ${GAOS_DATA_DIR:-data}/editor.db
