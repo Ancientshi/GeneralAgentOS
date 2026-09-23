@@ -61,3 +61,18 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      - name: Verify container startup and authentication
+        env:
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          IMAGE="ghcr.io/${REPOSITORY,,}:${GITHUB_REF_NAME#v}"
+          docker run -d --name gaos-smoke -e OPENAI_API_KEY=test-only -e GAOS_API_KEY=test-only -p 127.0.0.1:17777:7777 "$IMAGE"
+          trap 'docker logs gaos-smoke; docker rm -f gaos-smoke' EXIT
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:17777/health >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:17777/health
+          test "$(docker exec gaos-smoke id -u)" = 10001
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:17777/agents)" = 401
+          curl -fsS -H 'Authorization: Bearer test-only' http://127.0.0.1:17777/agents
