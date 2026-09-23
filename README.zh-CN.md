@@ -32,6 +32,9 @@ gaos stop my-agent
 `init` 自动生成服务访问密钥，保存在 `.env` 的 `GAOS_API_KEY` 中。
 客户端用 `Authorization: Bearer <密钥>` 调用 API。`/health` 可直接检查是否启动。
 前台运行使用 `gaos serve`。修改 profile 后停止并重新部署即可应用。
+如需连接 Agno 官网控制台，可在官网开启 **Token-Based Authorization（JWT）**，
+并在 AgentOS 配置公钥验签；它与默认的 `GAOS_API_KEY` 是两种认证模式，
+同时保留旧网页时应使用不同端口的两个实例。配置见 [profile 说明](docs/profiles.md)。
 
 ## 保留原有灵活性
 
@@ -55,6 +58,30 @@ benchmark、具体题目与变体，执行后自动路由到对应官方 evaluat
 需要开机自启和崩溃重启时使用 `docker compose up -d --build`。
 Docker 部署会持久化数据，默认仅开放本机端口。原本安装在宿主机上的 stdio MCP 程序
 需另行加入镜像，或使用原生部署。
+
+## 验证范围与当前限制
+
+以下为 **2026-09-23 云端部署验收**，不表示五套 benchmark 全部完成实验：
+
+| 验证项 | 实测结果及范围 |
+|---|---|
+| 代码 | 认证、profile、运行时的 29 项定向测试，以及 benchmark 引擎的 20 项测试通过；Ruff 检查通过。这不是完整的五套 benchmark 实验。 |
+| 在线服务 | 云端 API、Agent UI、Agno 官网 JWT 入口及无 root 执行沙盒已运行。校正服务器时钟后，用户确认官网 Chat 可以打开。 |
+| 模型链路 | 当前部署通过 SSH 反向转发使用用户电脑上的 Proxy LLM `gpt-6-luna`。真实 AgentOS 对话调用了 benchmark 工具并完成回复；这只验证连接和工具调用，未证明模型能自主解题。电脑上的代理与转发断开后，聊天将无法生成回复。 |
+| 官方评分 | DARE-Bench 的 Pokemon Unite 分类题 `v2`（训练 66 行、预测 8 行）经上游评分器评分：多数类基线 macro F1 为 `0.181818`；**提供随机森林解题代码后**，执行、提交并查询反馈所得 macro F1 为 `0.629630`。后者是工具链验收，**不是 agent 自主解题成绩**。 |
+| 自主解题 | 切换模型前，Qwen3-8B 的一次独立尝试未产生有效提交或官方分数；`gpt-6-luna` 尚未完成自主 benchmark 全流程验证。 |
+
+示例服务器只安装了上述 DARE 题目的数据。其他 benchmark 的适配器和 DARE 题目索引已接入，
+但数据、评测依赖或 judge 权限需要逐题准备。Data Science Lab 的 10 个模板中，7 个 CPU 模板
+已在合成数据上实际运行；另 3 个可选模型模板只完成接口和编译检查，服务器未安装其重量级依赖与权重。
+详见 [benchmark 准备条件与协议边界](extensions/benchmarks/README.md) 和
+[模板验证情况](extensions/data-science/README.md)。
+
+当前模型是**服务器部署配置**，不是仓库默认值。自行接入同类代理时，在 profile 中设置
+`provider: proxyllm`、`model: gpt-6-luna`、`base_url: http://127.0.0.1:18080/v1`，
+并按代理要求设置 `api_key_env`。本次代理调用工具还需要
+`model_options.reasoning_effort: none`。云端的 `127.0.0.1` 指云服务器本身，
+因此需先将本机代理反向转发至云端回环地址。
 
 参见 [profile 配置说明](docs/profiles.md)、[旧项目迁移](docs/migration.md)、
 [英文完整说明](README.md)。Release 包不包含个人密钥、私有 MCP 路径或会话数据库。

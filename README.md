@@ -98,8 +98,11 @@ inside the container; host-only MCP programs work with the native `gaos` deploym
 
 The local `gaos deploy` command detaches from the terminal and verifies startup. It does **not**
 provide automatic restart after a crash or reboot; use Compose or your service manager for that.
-Bind to a non-loopback address only with a configured `GAOS_API_KEY`; use HTTPS at your reverse proxy.
-The shared key grants full access to this deployment. This release does not provide per-user isolation.
+Bind to a non-loopback address only with a configured API key or JWT authorization; use HTTPS at
+your reverse proxy. The default shared key grants full access and does not provide per-user
+isolation. For the Agno Control Plane, use its **Token-Based Authorization (JWT)** switch and a
+public verification key; this is a different mode from the shared `GAOS_API_KEY`. See the
+[profile reference](docs/profiles.md) for the overlay and for running both modes on separate ports.
 
 ## Optional benchmark skills
 
@@ -115,6 +118,32 @@ templates; the benchmark sandbox executes them and the official evaluator scores
 The combined profile is `extensions/data-science/profile.yaml`. Optional Hugging Face and Kaggle metadata
 search is separate from the default offline benchmark workflow. See the extension's validation table
 for tested baseline recipes versus optional model templates.
+
+## Verification and current limits
+
+The following is the **2026-09-23 deployment check**, not a claim that every benchmark or model
+has been fully evaluated:
+
+| Check | Observed result and scope |
+|---|---|
+| Code | 29 targeted authorization/profile/runtime tests and 20 benchmark-engine tests passed; Ruff passed. This is not a full five-benchmark experiment. |
+| Live AgentOS | The API, Agent UI, Agno Control Plane JWT endpoint and rootless execution sandbox ran on the cloud server. The Control Plane connection opened after the server clock was corrected; the user confirmed Chat opened. |
+| Model connectivity | The deployed agent uses an OpenAI-compatible local Proxy LLM, `gpt-6-luna`, through an SSH reverse tunnel. A live AgentOS chat called a benchmark tool and completed. This checks connectivity and tool use, not autonomous benchmark solving. The laptop's proxy and tunnel must remain online for chat. |
+| Official evaluation | One DARE-Bench Pokemon Unite classification task (`v2`, 66 training rows and 8 prediction rows) was scored by the upstream evaluator: majority baseline macro F1 `0.181818`; a run supplied with RandomForest solution code scored `0.629630`. That score validates execution, submission and evaluator routing; it is **not** an autonomous agent score. |
+| Autonomous solving | A separate attempt with the earlier Qwen3-8B deployment produced no valid submission or official score. `gpt-6-luna` has not yet completed an autonomous benchmark run. |
+
+Only that DARE task's data is installed on the example server. The other benchmark adapters and
+DARE task index are available, but their task data, evaluator dependencies or judge access must
+be prepared separately. Of Data Science Lab's ten recipes, seven CPU recipes were run on synthetic
+data; the three optional model recipes were checked for interface/compilation but their heavyweight
+dependencies and weights are not installed on that server. See the [benchmark setup and protocol
+limits](extensions/benchmarks/README.md) and [recipe validation](extensions/data-science/README.md).
+
+The live model choice is deployment configuration, not a repository default. To use the same
+OpenAI-compatible proxy in your own profile, set `provider: proxyllm`, `model: gpt-6-luna`,
+`base_url: http://127.0.0.1:18080/v1` and an `api_key_env` appropriate for your proxy. The
+verified proxy also required `model_options.reasoning_effort: none` for tool calls. On a remote
+server, `127.0.0.1` means the server itself, so forward the local proxy to that address first.
 
 ## Development and releases
 

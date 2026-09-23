@@ -1,4 +1,5 @@
 import json
+import sqlite3
 import sys
 import time
 
@@ -83,6 +84,19 @@ def test_background_evaluation(configured):
         time.sleep(0.05)
     assert state["status"] == "completed"
     assert state["metrics"]["accuracy"] == 0
+
+
+def test_binary_database_read_returns_actionable_error_instead_of_context_flood(configured):
+    rid = configured.start("test", "sum")["run_id"]
+    path = configured.folder(rid) / "workspace/data.sqlite"
+    with sqlite3.connect(path) as db:
+        db.execute("CREATE TABLE records (value TEXT)")
+        db.execute("INSERT INTO records VALUES (?)", ("sample" * 10000,))
+    for offset in (0, 16000):
+        with pytest.raises(BenchError, match="execute_python with sqlite3"):
+            configured.read_file(rid, "data.sqlite", offset=offset)
+    configured.write_file(rid, "notes.txt", "中文分析\n")
+    assert configured.read_file(rid, "notes.txt")["text"] == "中文分析\n"
 
 
 def test_missing_artifact_keeps_run_open(configured):

@@ -9,9 +9,11 @@ from agno.agent import Agent
 from agno.db.sqlite import SqliteDb
 from agno.models.openai import OpenAIChat
 from agno.os import AgentOS
+from agno.os.config import AuthorizationConfig
 from starlette.responses import JSONResponse
 
 from . import __version__
+from .models import VLLMChat
 from .profile import AGENT_FIELDS, Profile, ProfileError
 
 
@@ -25,6 +27,10 @@ def build_model(cfg: dict):
     api_key = os.getenv(env_name)
     if not api_key:
         raise ProfileError(f"Missing model credential environment variable: {env_name}")
+    if provider == "vllm":
+        options.setdefault("provider", "VLLM")
+        options.setdefault("name", "VLLM")
+        return VLLMChat(id=cfg["model"], base_url=cfg.get("base_url"), api_key=api_key, **options)
     return OpenAIChat(id=cfg["model"], base_url=cfg.get("base_url"), api_key=api_key, **options)
 
 
@@ -125,7 +131,28 @@ def create_app(profile: Profile):
     settings = profile.data["os"]
     key_env = settings.get("api_key_env", "GAOS_API_KEY")
     key = os.getenv(key_env)
-    if settings.get("host", "127.0.0.1") not in {"127.0.0.1", "localhost", "::1"} and not key:
+    authorization = settings.get("authorization", False)
+    authorization_config = None
+    if authorization:
+        public_key_file = settings.get("jwt_verification_key_file")
+        if public_key_file:
+            try:
+                public_key = profile.path(public_key_file).read_text(encoding="utf-8").strip()
+            except (OSError, UnicodeError) as exc:
+                raise ProfileError("Cannot read os.jwt_verification_key_file") from exc
+            if not public_key:
+                raise ProfileError("os.jwt_verification_key_file is empty")
+            authorization_config = AuthorizationConfig(verification_keys=[public_key], algorithm="RS256")
+        elif not (os.getenv("JWT_VERIFICATION_KEY") or os.getenv("JWT_JWKS_FILE")):
+            raise ProfileError(
+                "JWT authorization requires os.jwt_verification_key_file, "
+                "JWT_VERIFICATION_KEY or JWT_JWKS_FILE"
+            )
+    if (
+        settings.get("host", "127.0.0.1") not in {"127.0.0.1", "localhost", "::1"}
+        and not key
+        and not authorization
+    ):
         raise ProfileError(f"Set {key_env} before binding to a non-loopback address")
     agents = {}
 
@@ -166,11 +193,13 @@ def create_app(profile: Profile):
         description=settings.get("description", "Profile-driven agents"),
         version=__version__,
         agents=list(agents.values()),
+        authorization=authorization,
+        authorization_config=authorization_config,
         cors_allowed_origins=settings.get("cors_origins", []),
         telemetry=False,
     )
     app = agent_os.get_app()
-    if key:
+    if key and not authorization:
         app.add_middleware(BearerAuth, key=key)
     app.state.gaos = agent_os
     return app

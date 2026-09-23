@@ -69,6 +69,8 @@ def model_server():
 def profile_factory(tmp_path, monkeypatch):
     monkeypatch.setenv("MODEL_API_KEY", "test-only")
     monkeypatch.delenv("GAOS_API_KEY", raising=False)
+    for name in ("OS_SECURITY_KEY", "JWT_VERIFICATION_KEY", "JWT_JWKS_FILE"):
+        monkeypatch.delenv(name, raising=False)
 
     def create(**changes):
         cfg = {
