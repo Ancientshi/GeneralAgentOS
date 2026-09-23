@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "general-agent-data-science"
+version = "0.1.0"
+description = "Independent data-science resource catalog, skills and portable analysis recipes"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+mcp = ["mcp>=2.1,<3", "fastmcp>=4,<5"]
+test = ["pytest>=8,<10", "numpy>=2,<3", "pandas>=2.2,<3", "scikit-learn>=1.5,<2", "scipy>=1.14,<2"]
+kaggle = ["kaggle>=1.7,<3"]
+cpu = ["catboost==1.2.8", "statsforecast==2.0.2", "numba==0.61.2", "llvmlite==0.44.0"]
+
+[project.scripts]
+gaos-ds = "gaos_ds.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gaos_ds"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "skills", "README.md", "RESOURCE_GUIDE.md", "pyproject.toml", "profile.yaml", "Dockerfile.cpu", "examples"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["gaos_ds"]
+
+[tool.ruff.lint.per-file-ignores]
+# Templates are concatenated with common.py and generated metadata before compile/execution.
+"src/gaos_ds/templates/*.py" = ["F821"]

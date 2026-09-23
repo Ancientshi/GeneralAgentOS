@@ -35,6 +35,15 @@ gaos stop my-agent
 
 ## 保留原有灵活性
 
+新增可选的 [Benchmark Lab](extensions/benchmarks/README.md)：通过 skill 和 MCP 选择
+benchmark、具体题目与变体，执行后自动路由到对应官方 evaluator 并保存反馈。
+扩展独立安装，数据和评分依赖按 benchmark 配置，不修改核心运行逻辑。详见接入文档中的覆盖范围和准备条件。
+
+[Data Science Lab](extensions/data-science/README.md) 进一步提供 24 张资源卡、六个分析技能和十个模型/分析模板，
+覆盖表格预测、时间序列、统计分析、数据工程以及 Hugging Face/Kaggle 资源发现。
+组合配置 `extensions/data-science/profile.yaml` 将方法选择、沙箱执行与官方评价接通；
+轻量模板已运行验证，大模型入口的依赖与验证状态单独列明。
+
 - 多份配置叠加：`gaos serve -p main.yaml -p history.yaml`。
 - vLLM 等兼容 OpenAI 的接口：在 profile 中设置 `provider`、`base_url` 和 `api_key_env`。
 - MCP 注册表也在 profile 内，支持 stdio、SSE、streamable HTTP。

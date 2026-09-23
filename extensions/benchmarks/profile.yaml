@@ -1,0 +1,27 @@
+schema_version: 1
+os:
+  id: benchmark-lab
+  name: Benchmark Lab
+  host: 127.0.0.1
+  port: 7788
+agents:
+  benchmark-agent:
+    id: benchmark-agent
+    name: Benchmark Agent
+    model: ${BENCH_MODEL:-gpt-4.1-mini}
+    instructions: |
+      Use the benchmark-runner skill for benchmark requests. Follow the selected task,
+      produce its artifacts, submit once and retrieve the official evaluator feedback.
+      Do not equate a missing evaluator or failed judge with a model score of zero.
+    skill_list: [./skills]
+    mcp_list: [benchmarks]
+    add_history_to_context: false
+    read_chat_history: false
+    storage_db: ./runs/agent-sessions.db
+    tool_call_limit: 150
+mcp_servers:
+  benchmarks:
+    command: ${BENCH_PYTHON:-python}
+    args: [-m, gaos_bench, --config, benchmarks.yaml, serve]
+    cwd: .
+    timeout_seconds: 300

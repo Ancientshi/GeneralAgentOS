@@ -1,0 +1,56 @@
+schema_version: 1
+runs_dir: ./runs
+max_code_calls: 80
+sandbox:
+  image: gaos-bench-sandbox:latest
+  memory: 4g
+  cpus: 2
+  max_seconds: 120
+benchmarks:
+  dare-bench:
+    root: ./upstream/dare-bench
+  coda-bench:
+    root: ./upstream/CoDA-Bench
+    communities: ./datasets/coda/communities
+  ambig-ds:
+    root: ./upstream/Ambig-DS-T
+    prepared: ./datasets/ambig-target/public
+    gold: ./datasets/ambig-target/gold
+    objective_root: ./upstream/Ambig-DS-M
+    mle_data: ./datasets/mle
+    # Install MLE-bench in a separate Python >= 3.11 environment, then configure:
+    # evaluators:
+    #   ambig-objective:
+    #     python: /absolute/path/to/mle-venv/bin/python
+  ddr-bench:
+    root: ./upstream/DDR_Bench
+    scenarios:
+      10k:
+        data: ./datasets/ddr/10k_financial_data.db
+      mimic:
+        data: ./datasets/ddr/mimic_iv.db
+      globem:
+        data: ./datasets/ddr/globem
+    evaluators:
+      ddr:
+        provider: openai
+        model: gpt-5-mini
+        required_env: [OPENAI_API_KEY]
+        timeout_seconds: 1800
+  dacomp:
+    root: ./upstream/DAComp
+    da_data: ./datasets/dacomp-da
+    de_data: ./datasets/dacomp-de
+    language: en
+    evaluators:
+      dacomp-da:
+        # Names must exist in upstream evaluation_suite/core/config.py.
+        model: default_eval_config
+        required_env: [AZURE_OPENAI_API_KEY]
+        timeout_seconds: 1800
+      dacomp-arch:
+        # Configure upstream evaluation_suite_arch/utils/config.py as well.
+        model: default_eval_config
+        required_env: [AZURE_OPENAI_API_KEY]
+      dacomp-de:
+        gold_dir: ./datasets/dacomp-de-gold
