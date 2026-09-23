@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-GAOS_VERSION="${GAOS_VERSION:-1.0.1}"
+GAOS_VERSION="${GAOS_VERSION:-1.0.2}"
 GAOS_INSTALL_DIR="${GAOS_INSTALL_DIR:-$HOME/.local/share/general-agent-os}"
 GAOS_BIN_DIR="${GAOS_BIN_DIR:-$HOME/.local/bin}"
 GAOS_PYTHON="${GAOS_PYTHON:-python3}"
@@ -36,7 +36,7 @@ fi
 python="$GAOS_INSTALL_DIR/venv/bin/python"
 "$python" -m pip install --upgrade pip
 if [[ -n "$source_path" && -f "$source_path/pyproject.toml" ]]; then
-  "$python" -m pip install --upgrade "$source_path[mcp]"
+  "$python" -m pip install --upgrade --prefer-binary "$source_path[mcp]"
 else
   asset="general_agent_os-${GAOS_VERSION}-py3-none-any.whl"
   release="https://github.com/Ancientshi/GeneralAgentOS/releases/download/v${GAOS_VERSION}"
@@ -50,7 +50,7 @@ expected = {k.strip().lstrip('*'): v for k,v in checksums.items()}.get(name)
 if not expected or hashlib.sha256((root/name).read_bytes()).hexdigest() != expected:
     raise SystemExit('Release checksum verification failed')
 PY
-  "$python" -m pip install --upgrade "$temp_dir/$asset[mcp]"
+  "$python" -m pip install --upgrade --prefer-binary "$temp_dir/$asset[mcp]"
 fi
 ln -sfn "$GAOS_INSTALL_DIR/venv/bin/gaos" "$GAOS_BIN_DIR/gaos"
 "$GAOS_BIN_DIR/gaos" --version
