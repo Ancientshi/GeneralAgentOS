@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2 — 2026-09-23
+
+- Prefer compatible prebuilt dependencies in the installer, avoiding unnecessary compiler requirements on Intel macOS / Python 3.10.
+
 ## 1.0.1 — 2026-09-23
 
 - Normalize double-encoded legacy session JSON on a private migration staging copy.
