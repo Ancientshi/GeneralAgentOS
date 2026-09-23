@@ -10,11 +10,11 @@
 需要 Linux/macOS 和 Python 3.10+：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Ancientshi/GeneralAgentOS/v1.0.0/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Ancientshi/GeneralAgentOS/v1.0.1/install.sh | bash
 ```
 
 下载源码后也可直接 `bash install.sh`。安装到独立环境，不需要 sudo，不改系统 Python。
-在线安装命令需要 GitHub v1.0.0 Release 已发布。
+在线安装命令需要 GitHub v1.0.1 Release 已发布。
 
 ## 编写并部署
 
