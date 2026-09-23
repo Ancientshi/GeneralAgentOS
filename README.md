@@ -13,7 +13,7 @@ application code. Start one agent or several through the same API.
 Linux / macOS, Python 3.10 or newer:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Ancientshi/GeneralAgentOS/v1.0.0/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Ancientshi/GeneralAgentOS/v1.0.1/install.sh | bash
 ```
 
 The installer creates a dedicated environment under `~/.local/share/general-agent-os`, verifies the
@@ -110,7 +110,7 @@ ruff check src tests
 python -m build
 ```
 
-Release 1.0.0 pins **Agno 3.0.10**, verified against PyPI and the upstream stable release on
+Release 1.0.1 pins **Agno 3.0.10**, verified against PyPI and the upstream stable release on
 2026-09-23. This avoids unexpected major-version upgrades. See [CHANGELOG.md](CHANGELOG.md).
 Tests exercise API startup, streamed and non-streamed model runs with a local fake backend,
 MCP lifecycle, profile validation, detached deployment and database migration without paid API calls.
