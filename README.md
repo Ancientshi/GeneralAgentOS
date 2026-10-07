@@ -146,6 +146,9 @@ to list the five available suites. These are connectivity and tool checks, not b
 Its profile uses `provider: proxy-responses`, a gateway-key `api_key_env` and
 `model_options.store: false`. The model choice is deployment configuration, not a repository
 default. The laptop gateway and tunnel must stay online. The dedicated vLLM service remains off.
+The legacy static-key AgentOS service on port 7789 was subsequently disabled; the JWT Control
+Plane service on port 7791 remains active. The old Agent UI on port 3002 still serves pages but
+cannot chat through the disabled legacy endpoint.
 
 ## Development and releases
 
