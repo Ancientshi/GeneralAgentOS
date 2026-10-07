@@ -128,7 +128,7 @@ has been fully evaluated:
 |---|---|
 | Code | 29 targeted authorization/profile/runtime tests and 20 benchmark-engine tests passed; Ruff passed. This is not a full five-benchmark experiment. |
 | Live AgentOS | The API, Agent UI, Agno Control Plane JWT endpoint and rootless execution sandbox ran on the cloud server. The Control Plane connection opened after the server clock was corrected; the user confirmed Chat opened. |
-| Model connectivity | The deployed agent uses an OpenAI-compatible local Proxy LLM, `gpt-6-luna`, through an SSH reverse tunnel. A live AgentOS chat called a benchmark tool and completed. This checks connectivity and tool use, not autonomous benchmark solving. The laptop's proxy and tunnel must remain online for chat. |
+| Model connectivity | On 2026-09-23, the deployed agent used a local Proxy LLM, `gpt-6-luna`, through an SSH reverse tunnel; a live chat called a benchmark tool. This checked connectivity and tool use, not autonomous benchmark solving. |
 | Official evaluation | One DARE-Bench Pokemon Unite classification task (`v2`, 66 training rows and 8 prediction rows) was scored by the upstream evaluator: majority baseline macro F1 `0.181818`; a run supplied with RandomForest solution code scored `0.629630`. That score validates execution, submission and evaluator routing; it is **not** an autonomous agent score. |
 | Autonomous solving | A separate attempt with the earlier Qwen3-8B deployment produced no valid submission or official score. `gpt-6-luna` has not yet completed an autonomous benchmark run. |
 
@@ -139,11 +139,13 @@ data; the three optional model recipes were checked for interface/compilation bu
 dependencies and weights are not installed on that server. See the [benchmark setup and protocol
 limits](extensions/benchmarks/README.md) and [recipe validation](extensions/data-science/README.md).
 
-The live model choice is deployment configuration, not a repository default. To use the same
-OpenAI-compatible proxy in your own profile, set `provider: proxyllm`, `model: gpt-6-luna`,
-`base_url: http://127.0.0.1:18080/v1` and an `api_key_env` appropriate for your proxy. The
-verified proxy also required `model_options.reasoning_effort: none` for tool calls. On a remote
-server, `127.0.0.1` means the server itself, so forward the local proxy to that address first.
+On 2026-10-07, the live deployment switched to the local streaming-only Responses gateway at
+`http://127.0.0.1:8765/v1` with `gpt-5.6-terra`. The cloud agent returned `READY` in real
+streaming and non-streaming chats through the SSH reverse tunnel, then called benchmark tools
+to list the five available suites. These are connectivity and tool checks, not benchmark scores.
+Its profile uses `provider: proxy-responses`, a gateway-key `api_key_env` and
+`model_options.store: false`. The model choice is deployment configuration, not a repository
+default. The laptop gateway and tunnel must stay online. The dedicated vLLM service remains off.
 
 ## Development and releases
 

@@ -3,9 +3,9 @@ import json
 
 import pytest
 from agno.models.message import Message
-from agno.models.openai import OpenAIChat
+from agno.models.openai import OpenAIChat, OpenAIResponses
 
-from general_agent_os.models import VLLMChat
+from general_agent_os.models import StreamingOnlyResponses, VLLMChat
 from general_agent_os.runtime import build_model
 
 
@@ -43,3 +43,24 @@ def test_vllm_adapter_selection_and_provider_tool_metadata(monkeypatch):
     sent = model.get_request_params(tools=tools)["tools"][0]["function"]
     assert "requires_confirmation" not in sent and "external_execution" not in sent
     assert type(build_model({"provider": "openai", "model": "test"})) is OpenAIChat
+
+
+def test_responses_adapter_selection(monkeypatch):
+    monkeypatch.setenv("MODEL_API_KEY", "gateway-key")
+    model = build_model({
+        "provider": "openai-responses",
+        "model": "gpt-5.6-terra",
+        "base_url": "http://127.0.0.1:8765/v1",
+        "model_options": {"store": False},
+    })
+    assert type(model) is OpenAIResponses
+    assert model.id == "gpt-5.6-terra"
+    assert model.base_url == "http://127.0.0.1:8765/v1"
+    assert model.store is False
+    proxy = build_model({
+        "provider": "proxy-responses",
+        "model": "gpt-5.6-terra",
+        "base_url": "http://127.0.0.1:8765/v1",
+        "model_options": {"store": False},
+    })
+    assert type(proxy) is StreamingOnlyResponses

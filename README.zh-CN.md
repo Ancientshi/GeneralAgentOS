@@ -67,7 +67,7 @@ Docker 部署会持久化数据，默认仅开放本机端口。原本安装在�
 |---|---|
 | 代码 | 认证、profile、运行时的 29 项定向测试，以及 benchmark 引擎的 20 项测试通过；Ruff 检查通过。这不是完整的五套 benchmark 实验。 |
 | 在线服务 | 云端 API、Agent UI、Agno 官网 JWT 入口及无 root 执行沙盒已运行。校正服务器时钟后，用户确认官网 Chat 可以打开。 |
-| 模型链路 | 当前部署通过 SSH 反向转发使用用户电脑上的 Proxy LLM `gpt-6-luna`。真实 AgentOS 对话调用了 benchmark 工具并完成回复；这只验证连接和工具调用，未证明模型能自主解题。电脑上的代理与转发断开后，聊天将无法生成回复。 |
+| 模型链路 | 2026-09-23 的部署通过 SSH 反向转发使用本机 Proxy LLM `gpt-6-luna`；真实对话调用了 benchmark 工具。这只验证连接和工具调用，未证明模型能自主解题。 |
 | 官方评分 | DARE-Bench 的 Pokemon Unite 分类题 `v2`（训练 66 行、预测 8 行）经上游评分器评分：多数类基线 macro F1 为 `0.181818`；**提供随机森林解题代码后**，执行、提交并查询反馈所得 macro F1 为 `0.629630`。后者是工具链验收，**不是 agent 自主解题成绩**。 |
 | 自主解题 | 切换模型前，Qwen3-8B 的一次独立尝试未产生有效提交或官方分数；`gpt-6-luna` 尚未完成自主 benchmark 全流程验证。 |
 
@@ -77,11 +77,13 @@ Docker 部署会持久化数据，默认仅开放本机端口。原本安装在�
 详见 [benchmark 准备条件与协议边界](extensions/benchmarks/README.md) 和
 [模板验证情况](extensions/data-science/README.md)。
 
-当前模型是**服务器部署配置**，不是仓库默认值。自行接入同类代理时，在 profile 中设置
-`provider: proxyllm`、`model: gpt-6-luna`、`base_url: http://127.0.0.1:18080/v1`，
-并按代理要求设置 `api_key_env`。本次代理调用工具还需要
-`model_options.reasoning_effort: none`。云端的 `127.0.0.1` 指云服务器本身，
-因此需先将本机代理反向转发至云端回环地址。
+2026-10-07，线上部署改用本机仅支持流式 Responses 的代理：
+`http://127.0.0.1:8765/v1`、模型 `gpt-5.6-terra`。云端 AgentOS 经过 SSH 反向转发，
+真实流式及非流式聊天都返回 `READY`，随后调用 benchmark 工具列出了五套题库；
+这些是连通性和工具调用验证，不是 benchmark 成绩。对应 profile 使用
+`provider: proxy-responses`、网关密钥对应的 `api_key_env` 和
+`model_options.store: false`。模型是**服务器部署配置**，不是仓库默认值；
+电脑上的代理与转发断开后聊天将无法生成回复。专用 vLLM 服务保持关闭。
 
 参见 [profile 配置说明](docs/profiles.md)、[旧项目迁移](docs/migration.md)、
 [英文完整说明](README.md)。Release 包不包含个人密钥、私有 MCP 路径或会话数据库。
