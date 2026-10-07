@@ -104,7 +104,10 @@ RENAMED = {
     "num_past_session_runs": "num_past_session_runs_in_search",
     "response_model": "output_schema",
 }
-PROVIDERS = {"openai", "openai-compatible", "vllm", "proxyllm", "siliconflow", "jacobapi"}
+PROVIDERS = {
+    "openai", "openai-compatible", "openai-responses", "proxy-responses",
+    "vllm", "proxyllm", "siliconflow", "jacobapi",
+}
 
 
 def validate_profile(profile: Profile) -> None:

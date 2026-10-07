@@ -7,13 +7,13 @@ import secrets
 
 from agno.agent import Agent
 from agno.db.sqlite import SqliteDb
-from agno.models.openai import OpenAIChat
+from agno.models.openai import OpenAIChat, OpenAIResponses
 from agno.os import AgentOS
 from agno.os.config import AuthorizationConfig
 from starlette.responses import JSONResponse
 
 from . import __version__
-from .models import VLLMChat
+from .models import StreamingOnlyResponses, VLLMChat
 from .profile import AGENT_FIELDS, Profile, ProfileError
 
 
@@ -31,6 +31,10 @@ def build_model(cfg: dict):
         options.setdefault("provider", "VLLM")
         options.setdefault("name", "VLLM")
         return VLLMChat(id=cfg["model"], base_url=cfg.get("base_url"), api_key=api_key, **options)
+    if provider == "openai-responses":
+        return OpenAIResponses(id=cfg["model"], base_url=cfg.get("base_url"), api_key=api_key, **options)
+    if provider == "proxy-responses":
+        return StreamingOnlyResponses(id=cfg["model"], base_url=cfg.get("base_url"), api_key=api_key, **options)
     return OpenAIChat(id=cfg["model"], base_url=cfg.get("base_url"), api_key=api_key, **options)
 
 

@@ -30,14 +30,20 @@ Control Plane tokens before Agno can validate them. Static API keys cannot authe
 JWT endpoint. To retain an existing static-key client, run a separate instance with the
 original profile and use a JWT overlay on a different port for the Control Plane.
 
-Each agent requires `model`. Use `provider: openai` (default) or `openai-compatible`, `vllm`,
-`proxyllm`, `siliconflow`, `jacobapi`. Non-OpenAI providers require `base_url`. These names all use
-Agno's OpenAI Chat transport; they do not bundle private endpoints or keys. `api_key_env` defaults
+Each agent requires `model`. Use `provider: openai` (default) or `openai-compatible`,
+`openai-responses`, `proxy-responses`, `vllm`, `proxyllm`, `siliconflow`, `jacobapi`.
+`openai-responses` uses Agno's Responses API transport; `proxy-responses` also supports
+streaming-only Responses gateways when the agent run is non-streaming. The other names use
+Chat Completions. Non-OpenAI providers require
+`base_url`. No provider bundles private endpoints or keys. `api_key_env` defaults
 to OPENAI_API_KEY for OpenAI and MODEL_API_KEY otherwise. For local servers without authentication,
 set the chosen variable to `EMPTY` explicitly.
 
 `model_options` passes supported OpenAIChat options such as temperature/max_tokens.
 `extra_body` and `request_params` are sent to the model, allowing vLLM-specific settings.
+For a gateway that exposes only streaming `/v1/responses`, use `provider: proxy-responses`,
+the gateway's `/v1` URL and a gateway-key `api_key_env`. Set `model_options.store: false` when
+required by the gateway. `proxyllm` continues to use `/v1/chat/completions`.
 
 `storage_db` defaults to `data/<agent-name>.db`; `storage_table` defaults to `agno_sessions`.
 `db_id` identifies the database in AgentOS. Give separate agents distinct database files unless
