@@ -84,6 +84,8 @@ Docker 部署会持久化数据，默认仅开放本机端口。原本安装在�
 `provider: proxy-responses`、网关密钥对应的 `api_key_env` 和
 `model_options.store: false`。模型是**服务器部署配置**，不是仓库默认值；
 电脑上的代理与转发断开后聊天将无法生成回复。专用 vLLM 服务保持关闭。
+随后已停用旧的 7789 静态密钥 AgentOS；只保留 7791 JWT 入口。旧 3002 Agent UI
+仍能显示页面，但依赖已关闭的 7789 接口，当前不能在其中聊天。
 
 参见 [profile 配置说明](docs/profiles.md)、[旧项目迁移](docs/migration.md)、
 [英文完整说明](README.md)。Release 包不包含个人密钥、私有 MCP 路径或会话数据库。
